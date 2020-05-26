@@ -31,7 +31,7 @@
     "mongoose": "^5.9.13",
     "morgan": "^1.10.0",
     "pug": "^2.0.4",
-    "winston": "^3.2.1",
+    "winston": "^2.4.0",
     "winston-mongodb": "^3.0.0"
   }
 }

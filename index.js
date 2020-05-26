@@ -1,17 +1,27 @@
-const winston = require('winston');
 
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const config = require('config');
+const helmet = require('helmet');
+const compression = require('compression');
+const Joi = require('joi');
+const winston = require('winston');
+require('winston-mongodb');
+require('express-async-errors');
 
-require('./startup/logging');
+
 require('./startup/routes')(app);
-require('./startup/validation');
-require('./startup/prod')(app);
+
 
 app.set('view engine','pug');
 app.set('views','./views');
+
+
+Joi.objectId = require('joi-objectid')(Joi);
+
+app.use(helmet());
+app.use(compression());
 
 const db = config.get('db');
 mongoose.connect(db, {
