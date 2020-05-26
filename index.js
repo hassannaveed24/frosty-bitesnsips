@@ -7,7 +7,6 @@ const config = require('config');
 
 require('./startup/logging');
 require('./startup/routes')(app);
-require('./startup/config');
 require('./startup/validation');
 require('./startup/prod')(app);
 
@@ -19,6 +18,9 @@ mongoose.connect(db, {
      useNewUrlParser:true, useUnifiedTopology:true, useCreateIndex: true})
     .then(() => winston.info('Connected to MongoDB..'));
 
+    if(!config.get('jwtPrivateKey')){
+        throw new Error('FATAL ERROR: jwtPrivateKey is not defined.');
+    }
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=> winston.info(`Listening on port: ${port}` ));
