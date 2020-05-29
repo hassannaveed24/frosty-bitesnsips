@@ -19,6 +19,7 @@ app.use((req, res, next)=>{
         "Origin, X-Requested-With, Content-Type, Accept, Authorization"
         );
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+    res.setHeader( "Access-Control-Expose-Headers" ,"x-auth-token")
     next();
 });
  
@@ -46,4 +47,4 @@ mongoose.connect(db, {
     }
  
 const port = process.env.PORT || 3000;
-app.listen(port,()=> winston.info(Listening on port: ${port} ));
+app.listen(port,()=> winston.info(`Listening on port: ${port}` ));
