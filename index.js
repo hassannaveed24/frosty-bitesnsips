@@ -23,6 +23,13 @@ Joi.objectId = require('joi-objectid')(Joi);
 app.use(helmet());
 app.use(compression());
 
+app.use(function(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Headers", "Origin, ");
+    next();
+
+});
+
 const db = config.get('db');
 mongoose.connect(db, {
      useNewUrlParser:true, useUnifiedTopology:true, useCreateIndex: true})
