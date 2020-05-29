@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 router.get('/', async(req,res)=>{
-    const stocks = await Stock.find().sort('date');
+    const stocks = await Stock.find();
         res.send(stocks);    
 });
 router.post('/', auth, async(req, res) =>{

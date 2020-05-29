@@ -6,7 +6,7 @@ const {Product} = require('../models/product');
 
 
 router.get('/',async(req,res)=>{
-    const orders = await Order.find().sort('-date');
+    const orders = await Order.find();
     res.send(orders);
 });
 router.post('/',auth, async(req, res) =>{
