@@ -9,11 +9,17 @@ const router = express.Router();
 router.get('/', async(req,res)=>{
     // const stocks = await Stock.find();
 
-    const stocks = await Stock.aggregate([{$group : {_id: "$name", price:{$sum:"$price"}, quantity:{$sum:"$quantity"} }}])
+    const stocks = await Stock.aggregate([
+        {$group : {
+            _id: "$name",
+            price: {$sum: "$price"},
+            quantity: {$sum: "$quantity"} 
+        }}
+    ])
     
-        res.send(stocks);    
+    res.send(stocks);    
 });
-router.post('/', auth, async(req, res) =>{
+router.post('/', async(req, res) =>{
        // Validate
     const {error} = validate(req.body);
     if(error){
