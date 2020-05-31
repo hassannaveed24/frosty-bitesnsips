@@ -10,18 +10,21 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
     let doc = await User.findOne({ email: req.body.email });
+    if(doc){
+        const match = bcrypt.compareSync(req.body.password, doc.password);
+        if(match){
+            const payload = { _id: doc._id, name: doc.name, email: doc.email };
+            const key = config.get('jwtPrivateKey');
     
-    const match = bcrypt.compareSync(req.body.password, doc.password);
-    if(match){
-        const payload = { _id: doc._id, name: doc.name, email: doc.email };
-        const key = config.get('jwtPrivateKey');
-
-        let token = jwt.sign(payload, key);
-        res.json({ result: "success", name: doc.name, token, message: "Login successfully" });
-
-    }else{
+            let token = jwt.sign(payload, key);
+            res.json({ result: "success", name: doc.name, token, message: "Login successfully" });
+    
+        }else{
+            res.json({ result: "error", message: "Invalid email or password" });
+        }
+    }else
         res.json({ result: "error", message: "Invalid email or password" });
-    }
+
   });
 
 module.exports = router;
