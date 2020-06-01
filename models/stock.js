@@ -3,15 +3,12 @@ const Joi = require('joi');
 
 const Stock = mongoose.model('Stock', new mongoose.Schema({
     name: {type: String, required: true},
-    price: {type: Number, required: true},
-    quantity: {type: Number, required: true},
-    date: {type: Date,default:Date.now}
+    quantity: {type: Number, required: true}
 }));
 
 function validateStock(stock){
     const schema = {
         name: Joi.string().min(3).required(),
-        price: Joi.number().required(),
         quantity: Joi.number().required()
     };
     return Joi.validate(stock, schema);    

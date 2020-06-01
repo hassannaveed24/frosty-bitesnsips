@@ -7,15 +7,14 @@ const router = express.Router();
 
 
 router.get('/', async(req,res)=>{
-    // const stocks = await Stock.find();
+    const stocks = await Stock.find();
 
-    const stocks = await Stock.aggregate([
-        {$group : {
-            _id: "$name",
-            price: {$sum: "$price"},
-            quantity: {$sum: "$quantity"} 
-        }}
-    ])
+    // const stocks = await Stock.aggregate([
+    //     {$group : {
+    //         _id: "$name",
+    //         quantity: {$sum: "$quantity"} 
+    //     }}
+    // ])
     
     res.send(stocks);    
 });
@@ -29,7 +28,6 @@ router.post('/', async(req, res) =>{
 
     const stock =new Stock({        
         name: req.body.name,
-        price: req.body.price,
         quantity: req.body.quantity
     });
     await stock.save();
@@ -41,10 +39,12 @@ router.put('/:id',async (req,res)=>{
     if(error)
         return res.status(400).send(error.details[0].message);
         
+    const oldStock = await Stock.findOne();
+    const newStockQuantity = parseFloat(oldStock.quantity)  + parseFloat(req.body.quantity);
+    console.log(newStockQuantity);
+
     const stock = await Stock.findByIdAndUpdate(req.params.id,{
-        name: req.body.name,
-        price: req.body.price,
-        quantity: req.body.quantity
+        quantity: newStockQuantity
     },{new: true});
   
     if(!stock)
