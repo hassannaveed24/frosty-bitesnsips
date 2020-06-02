@@ -4,7 +4,7 @@ const morgan = require('morgan');
 
 const login = require('../routes/login');
 const stock = require('../routes/stock');
-const addstock = require('../routes/addstock');
+const editstock = require('../routes/editstock');
 const product = require('../routes/product');
 const order = require('../routes/order');
 const users = require('../routes/users');
@@ -21,7 +21,7 @@ module.exports = function(app){
 
     app.use('/api/login', login);
     app.use('/api/stock', stock);
-    app.use('/api/stock/add', addstock);
+    app.use('/api/stock/edit', editstock);
     app.use('/api/product', product);
     app.use('/api/order', order);
     app.use('/api/users', users);
