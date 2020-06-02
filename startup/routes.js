@@ -4,6 +4,7 @@ const morgan = require('morgan');
 
 const login = require('../routes/login');
 const stock = require('../routes/stock');
+const consumeStock = require('../routes/consumeStock')
 const product = require('../routes/product');
 const order = require('../routes/order');
 const users = require('../routes/users');
@@ -20,6 +21,7 @@ module.exports = function(app){
 
     app.use('/api/login', login);
     app.use('/api/stock', stock);
+    app.use('/api/consumeStock', consumeStock);
     app.use('/api/product', product);
     app.use('/api/order', order);
     app.use('/api/users', users);
