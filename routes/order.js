@@ -9,7 +9,7 @@ router.get('/',async(req,res)=>{
     const orders = await Order.find();
     res.send(orders);
 });
-router.post('/',auth, async(req, res) =>{
+router.post('/', async(req, res) =>{
     // Validate
     const {error} = validate(req.body);
     if(error)
