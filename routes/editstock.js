@@ -10,7 +10,7 @@ router.put('/:id',async (req,res)=>{
         return res.status(400).send(error.details[0].message);
     
     const oldStock = await Stock.findOne();
-    const newquantity = parseFloat(oldStock.quantity)  + parseFloat(req.body.quantity);
+    const newquantity = parseFloat(oldStock.quantity) + parseFloat(req.body.quantity);
     const stock = await Stock.findByIdAndUpdate(req.params.id,{
         quantity: newquantity
     },{new: true});
