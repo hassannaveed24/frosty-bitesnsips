@@ -4,10 +4,37 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/',async(req,res)=>{
-    const products = await Product.find();
+    // const products = await Product.find();
+
+    // const products = await Product.aggregate([
+    //     {$group : {
+    //         _id: "$category",
+    //         [
+    //             {
+    //                 name: "$name",
+    //                 price: "$price"
+    //             }
+    //         ]                
+    //     }}
+    // ])
+    
+    // const products = await Product.aggregate([
+    //     { $group : {_id: "$category", total: { $sum: "$price"}   }}
+    // ])
+
+    const timestamp = new Date().getUTCMilliseconds();
+    console.log(timestamp);
+    const products = await Product.aggregate([{$group: {
+        _id: "$category",
+        products: {$push: "$$ROOT"}
+    }}]);
+    
+
+        
+
     res.send(products);
 });
-router.post('/',auth, async(req, res) =>{
+router.post('/', async(req, res) =>{
     // Validate
     const {error} = validate(req.body);
     if(error){
@@ -17,7 +44,8 @@ router.post('/',auth, async(req, res) =>{
 
     const product =new Product({        
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        category: req.body.category
     });
     await product.save();
     res.send(product);
@@ -31,7 +59,7 @@ router.put('/:id',async (req,res)=>{
     const product = await Product.findByIdAndUpdate(req.params.id,{
         name: req.body.name,
         price: req.body.price,
-        quantity: req.body.quantity
+        category: req.body.category
     },{new: true});
   
     if(!product)
