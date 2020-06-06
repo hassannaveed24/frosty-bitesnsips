@@ -8,16 +8,29 @@ const router = express.Router();
 
 router.get('/', async(req,res)=>{
     const stocks = await Stock.find();
-
-    // const stocks = await Stock.aggregate([
-    //     {$group : {
-    //         _id: "$name",
-    //         quantity: {$sum: "$quantity"} 
-    //     }}
-    // ])
     
     res.send(stocks);    
 });
+
+router.put('/:id',async (req,res)=>{
+    const {error} = validate(req.body);
+    if(error)
+        return res.status(400).send(error.details[0].message);
+    
+    const oldStock = await Stock.findById(req.params.id);
+    const newquantity = parseFloat(oldStock.quantity) + parseFloat(req.body.quantity);
+    console.log(parseFloat(oldStock.quantity));
+
+    const stock = await Stock.findByIdAndUpdate(req.params.id,{
+        quantity: newquantity
+    },{new: true});
+
+    if(!stock)
+        return res.status(404).send('The stock with the given ID not found.');
+
+    res.send(stock);
+});
+
 router.post('/', async(req, res) =>{
        // Validate
     const {error} = validate(req.body);
@@ -35,7 +48,7 @@ router.post('/', async(req, res) =>{
 
 });
 
-router.delete('/:id',[auth,admin],async (req, res)=>{
+router.delete('/:id',async (req, res)=>{
     const stock = await Stock.findByIdAndRemove(req.params.id);
     if(!stock)
         return  res.status(404).send('The Stock with the given ID not found.');
@@ -44,7 +57,7 @@ router.delete('/:id',[auth,admin],async (req, res)=>{
 });
 router.get('/:id',async (req,res)=>{
     const stock = await Stock.findById(req.params.id);
-    if(!course)
+    if(!stock)
         return res.status(404).send('The stock with the given ID not found.');
     res.send(stock);
 });

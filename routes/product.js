@@ -3,34 +3,11 @@ const {Product,validate} = require('../models/product');
 const express = require('express');
 const router = express.Router();
 
-router.get('/',async(req,res)=>{
-    // const products = await Product.find();
-
-    // const products = await Product.aggregate([
-    //     {$group : {
-    //         _id: "$category",
-    //         [
-    //             {
-    //                 name: "$name",
-    //                 price: "$price"
-    //             }
-    //         ]                
-    //     }}
-    // ])
-    
-    // const products = await Product.aggregate([
-    //     { $group : {_id: "$category", total: { $sum: "$price"}   }}
-    // ])
-
-    const timestamp = new Date().getUTCMilliseconds();
-    console.log(timestamp);
+router.get('/',async(req,res)=>{    
     const products = await Product.aggregate([{$group: {
         _id: "$category",
         products: {$push: "$$ROOT"}
-    }}]);
-    
-
-        
+    }}]);        
 
     res.send(products);
 });
@@ -76,7 +53,7 @@ router.delete('/:id',async (req, res)=>{
 });
 router.get('/:id',async (req,res)=>{
     const product = await Product.findById(req.params.id);
-    if(!course)
+    if(!product)
         return res.status(404).send('The product with the given ID not found.');
     res.send(product);
 });
