@@ -20,6 +20,8 @@ router.put('/:id',async (req,res)=>{
     const oldStock = await Stock.findById(req.params.id);
     const newquantity = parseFloat(oldStock.quantity) + parseFloat(req.body.quantity);
     console.log(parseFloat(oldStock.quantity));
+    if(newquantity<0)
+        return res.status(404).send('"quantity" must be larger than or equal to 0');
 
     const stock = await Stock.findByIdAndUpdate(req.params.id,{
         quantity: newquantity
