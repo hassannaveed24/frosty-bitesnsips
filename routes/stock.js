@@ -40,6 +40,8 @@ router.post('/', async(req, res) =>{
         // 400 Bad Request
         return res.status(400).send(error.details[0].message);        
     }
+    if(req.body.quantity<0)
+    return res.status(404).send('"quantity" must be larger than or equal to 0');
 
     const stock =new Stock({        
         name: req.body.name,
