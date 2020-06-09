@@ -6,29 +6,20 @@ const {Product} = require('../models/product');
 
 
 router.get('/',async(req,res)=>{
-    const orders = await Order.find();
+    const orders = await Order.find().sort("-date");
     res.send(orders);
 });
 router.post('/', async(req, res) =>{
-    // Validate
-    const {error} = validate(req.body);
-    if(error)
-        return res.status(400).send(error.details[0].message);
     
-    const product = await Product.findById(req.body.productId);
-    if(!product) 
-        return res.status(400).send('Invalid product.');
-    
-    const order =new Order({        
-        saleprice: req.body.saleprice,
-        product: {
-            _id: product._id,
-            name: product.name,
-            price: product.price
-        },
-        discount: req.body.discount
+    const order =new Order({  
+        date: req.body.date,      
+        subtotal: req.body.subtotal,
+        discount: req.body.discount,
+        products: req.body.products
     });
-    await order.save();
+    await order.save();    
+
+    
     res.send(order);
 
 });
@@ -38,7 +29,10 @@ router.put('/:id',async (req,res)=>{
         return res.status(400).send(error.details[0].message);
         
     const order = await Order.findByIdAndUpdate(req.params.id,{
-        saleprice: req.body.price
+        date: req.body.date,      
+        subtotal: req.body.subtotal,
+        discount: req.body.discount,
+        products: req.body.products
     },{new: true});
   
     if(!order)

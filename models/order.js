@@ -3,11 +3,12 @@ const Joi = require('joi');
 const {productSchema, Product} = require('./product');
 
 const Order = mongoose.model('Order', new mongoose.Schema({
-    saleprice: {type: Number},
-    discount: {type: Number},
+    date: { type: Date, default: Date.now},
+    subtotal: {type: Number},
+    discount: { type: Number},
     products : [{
-        type: productSchema
-    }] 
+        type: productSchema, ref: 'Product'
+    }]    
 }));
 
 async function createOrder(saleprice, discount, products){
