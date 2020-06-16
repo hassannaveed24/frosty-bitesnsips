@@ -3,7 +3,7 @@ const Joi = require('joi');
 const {productSchema, Product} = require('./product');
 
 const Order = mongoose.model('Order', new mongoose.Schema({
-    date: { type: Date, default: Date() },
+    date: { type: String },
     subtotal: {type: Number},
     discount: { type: Number},
     products : [{
